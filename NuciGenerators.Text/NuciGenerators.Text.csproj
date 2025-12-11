@@ -11,6 +11,11 @@
     <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
     <PackageTags>Generators</PackageTags>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <ImplicitUsings>disable</ImplicitUsings>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NuciExtensions" Version="5.3.0" />
+  </ItemGroup>
 
 </Project>
