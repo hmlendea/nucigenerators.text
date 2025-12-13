@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-using UniversalNameGenerator.Models;
+using NuciGenerators.Text.Models;
 
-namespace NuciGenerators.Text.Generators
+namespace NuciGenerators.Text
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="NameGenerator"/> class.

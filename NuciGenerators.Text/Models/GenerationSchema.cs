@@ -43,9 +43,9 @@ namespace NuciGenerators.Text.Models
         /// <value>The filterlist path.</value>
         public string FilterlistPath { get; set; }
 
-        public WordCasing WordCasing { get; set; }
+        public WordCase WordCase { get; set; }
 
-        public GenerationSchema() => WordCasing = WordCasing.Sentence;
+        public GenerationSchema() => WordCase = WordCase.Sentence;
 
         public bool Equals(GenerationSchema other)
         {

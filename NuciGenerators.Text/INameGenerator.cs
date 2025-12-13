@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 using NuciGenerators.Text.Models;
 
-namespace NuciGenerators.Text.Generators
+namespace NuciGenerators.Text
 {
     /// <summary>
     /// Name Generator interface.
@@ -62,7 +62,7 @@ namespace NuciGenerators.Text.Generators
         /// </summary>
         /// <value>The word lists.</value>
         List<Wordlist> Wordlists { get; }
-        
+
         /// <summary>
         /// Generates names.
         /// </summary>
