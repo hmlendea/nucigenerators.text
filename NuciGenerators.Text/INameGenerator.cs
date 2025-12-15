@@ -64,6 +64,43 @@ namespace NuciGenerators.Text
         List<Wordlist> Wordlists { get; }
 
         /// <summary>
+        /// Generates names based on a schema.
+        /// </summary>
+        /// <param name="schema">The generation schema.</param>
+        /// <param name="maximumCount">The maximum number of names to generate.</param>
+        /// <returns>A collection of generated names.</returns>
+        IEnumerable<string> Generate(string schema, int maximumCount);
+
+
+        /// <summary>
+        /// Generates names based on a schema.
+        /// </summary>
+        /// <param name="schema">The generation schema.</param>
+        /// <param name="maximumCount">The maximum number of names to generate.</param>
+        /// <param name="casing">The casing of the generated names.</param>
+        /// <returns>A collection of generated names.</returns>
+        IEnumerable<string> Generate(string schema, int maximumCount, WordCase casing);
+
+        /// <summary>
+        /// Generates names based on a schema.
+        /// </summary>
+        /// <param name="schema">The generation schema.</param>
+        /// <param name="filters">The blacklist filters.</param>
+        /// <param name="maximumCount">The maximum number of names to generate.</param>
+        /// <returns>A collection of generated names.</returns>
+        IEnumerable<string> Generate(string schema, List<string> filters, int maximumCount);
+
+        /// <summary>
+        /// Generates names based on a schema.
+        /// </summary>
+        /// <param name="schema">The generation schema.</param>
+        /// <param name="filters">The blacklist filters.</param>
+        /// <param name="maximumCount">The maximum number of names to generate.</param>
+        /// <param name="casing">The casing of the generated names.</param>
+        /// <returns>A collection of generated names.</returns>
+        IEnumerable<string> Generate(string schema, List<string> filters, int maximumCount, WordCase casing);
+
+        /// <summary>
         /// Generates names.
         /// </summary>
         /// <returns>The names.</returns>

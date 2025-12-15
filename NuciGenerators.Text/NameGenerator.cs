@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime;
 using System.Text.RegularExpressions;
 
+using NuciExtensions;
 using NuciGenerators.Text.Models;
 
 namespace NuciGenerators.Text
@@ -68,6 +70,83 @@ namespace NuciGenerators.Text
         protected readonly Random random = new();
 
         /// <summary>
+        /// Generates names based on a schema.
+        /// </summary>
+        /// <param name="schema">The generation schema.</param>
+        /// <param name="maximumCount">The maximum number of names to generate.</param>
+        /// <returns>A collection of generated names.</returns>
+        public IEnumerable<string> Generate(string schema, int maximumCount)
+            => Generate(schema, [], maximumCount);
+
+        /// <summary>
+        /// Generates names based on a schema.
+        /// </summary>
+        /// <param name="schema">The generation schema.</param>
+        /// <param name="maximumCount">The maximum number of names to generate.</param>
+        /// <param name="casing">The casing of the generated names.</param>
+        /// <returns>A collection of generated names.</returns>
+        public IEnumerable<string> Generate(string schema, int maximumCount, WordCase casing)
+            => Generate(schema, [], maximumCount, casing);
+
+        /// <summary>
+        /// Generates names based on a schema.
+        /// </summary>
+        /// <param name="schema">The generation schema.</param>
+        /// <param name="filters">The blacklist filters.</param>
+        /// <param name="maximumCount">The maximum number of names to generate.</param>
+        /// <returns>A collection of generated names.</returns>
+        public IEnumerable<string> Generate(string schema, List<string> filters, int maximumCount)
+            => Generate(schema, filters, maximumCount, WordCase.Original);
+
+        /// <summary>
+        /// Generates names based on a schema.
+        /// </summary>
+        /// <param name="schema">The generation schema.</param>
+        /// <param name="filters">The blacklist filters.</param>
+        /// <param name="maximumCount">The maximum number of names to generate.</param>
+        /// <param name="casing">The casing of the generated names.</param>
+        /// <returns>A collection of generated names.</returns>
+        public IEnumerable<string> Generate(string schema, List<string> filters, int maximumCount, WordCase casing)
+        {
+            List<List<string>> z = [];
+            List<string> names = [];
+
+            int generatorsCount = schema.Count(x => x.Equals('{'));
+
+            while (z.Count < generatorsCount)
+            {
+                string name = schema;
+                string currentGeneration = schema;
+
+                while (currentGeneration.Contains('{') || currentGeneration.Contains('}'))
+                {
+                    int pos = currentGeneration.IndexOf('{') + 1;
+                    string com = currentGeneration[pos..currentGeneration.IndexOf('}')];
+                    IEnumerable<string> values = [];
+
+                    string[] split = com.Split(',');
+
+                    values = GenerateBySchema(schema, maximumCount, split, filters);
+
+                    currentGeneration = currentGeneration.Replace("{" + com + "}", string.Empty);
+                    z.Add([.. values]);
+                }
+            }
+
+            for (int i = 0; i < z.Min(x => x.Count); i++)
+            {
+                string name = string.Empty;
+
+                z.ForEach(x => name += x[i]);
+
+                name = GetNameWithCasing(name, casing);
+                names.Add(name);
+            }
+
+            return names;
+        }
+
+        /// <summary>
         /// Generates names.
         /// </summary>
         /// <returns>The names.</returns>
@@ -102,6 +181,16 @@ namespace NuciGenerators.Text
         public void Reset() => GeneratedWords.Clear();
 
         protected abstract string GenerationAlogrithm();
+
+        /// <summary>
+        /// Generates names based on a schema.
+        /// </summary>
+        /// <param name="schema">The generation schema.</param>
+        /// <param name="maximumCount">The maximum number of names to generate.</param>
+        /// <param name="split">The schema split parts.</param>
+        /// <param name="filters">The blacklist filters.</param>
+        /// <returns>A collection of generated names.</returns>
+        protected abstract IEnumerable<string> GenerateBySchema(string schema, int maximumCount, string[] split, List<string> filters);
 
         /// <summary>
         /// Checks wether the the name is valid.
@@ -151,6 +240,31 @@ namespace NuciGenerators.Text
             }
 
             return true;
+        }
+
+        private static string GetNameWithCasing(string name, WordCase casing)
+        {
+            if (casing.Equals(WordCase.Lower))
+            {
+                return name.ToLower();
+            }
+
+            if (casing.Equals(WordCase.Upper))
+            {
+                return name.ToUpper();
+            }
+
+            if (casing.Equals(WordCase.Title))
+            {
+                return name.ToTitleCase();
+            }
+
+            if (casing.Equals(WordCase.Sentence))
+            {
+                return name.ToSentenceCase();
+            }
+
+            return name;
         }
     }
 }
