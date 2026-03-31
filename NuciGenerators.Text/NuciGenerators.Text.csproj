@@ -9,7 +9,7 @@
     <Copyright>Copyright 2026 © Horațiu Mlendea</Copyright>
     <RepositoryUrl>https://github.com/hmlendea/nucigenerators.text</RepositoryUrl>
     <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
-    <PackageTags>Generators</PackageTags>
+    <PackageTags>Text TextGeneration TextGenerators Generators</PackageTags>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <ImplicitUsings>disable</ImplicitUsings>
   </PropertyGroup>
