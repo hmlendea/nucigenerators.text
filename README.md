@@ -274,6 +274,19 @@ NuciGenerators.Text is an in-process .NET library with an interface-based genera
 
 See the [architecture documentation](./ARCHITECTURE.md) for the system context, principal components, runtime flows, ownership boundaries, dependencies, constraints, and extension points.
 
+## 📚 Documentation
+
+The [repository knowledge base](./docs/INDEX.md) documents implementation contracts, causal execution flows, state ownership, verification evidence, and safe modification paths. It complements the root architecture rather than duplicating it.
+
+| Resource | Description |
+|----------|-------------|
+| [Knowledge Base Index](./docs/INDEX.md) | Complete catalogue, entry points, source baseline, and review coverage |
+| [Generator and Model API](./docs/api-reference/INDEX.md) | Public CLR contracts and protected extension points; no HTTP endpoints |
+| [Execution Flows](./docs/flows/generation.md) | Generation, ordered validation, and mutation/reset semantics |
+| [Change Guide](./docs/change-guide.md) | Modification impact, invariants, and focused verification |
+| [Testing](./docs/testing.md) | Behaviour-to-test mapping, executed baseline, and remaining gaps |
+| [Open Questions](./docs/ambiguities-and-open-questions.md) | Source/documentation differences and unverified guarantees |
+
 ## 🤝 Contributing
 
 You are welcome to submit any suggestion, feedback, or modification to this project.
