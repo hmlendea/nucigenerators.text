@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <RootNamespace>NuciGenerators.Text</RootNamespace>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
     <Description>Core text generation primitives for the NuciGenerators.Text.* packages.</Description>
     <Authors>Horațiu Mlendea</Authors>
     <Copyright>Copyright 2026 © Horațiu Mlendea</Copyright>
@@ -15,7 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NuciExtensions" Version="5.3.1" />
+    <PackageReference Include="NuciExtensions" Version="6.0.2" />
   </ItemGroup>
 
 </Project>
