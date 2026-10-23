@@ -268,17 +268,22 @@ NuciGenerators.Text/
 	Wordlist.cs
 ```
 
-## Contributing
+## 🤝 Contributing
 
-Contributions are welcome.
+You are welcome to submit any suggestion, feedback, or modification to this project.
 
-When contributing:
+When doing so, please:
+- Maintain cross-platform compatibility
+- Preserve the existing public contract unless a breaking change is intentional
+- Submit focused pull requests that conform to the existing code style
+- Maintain your branch synchronised with `master`
+- Revise the documentation when functionality changes
+- Properly test all modifications, including edge cases and error conditions
+- Include tests for additional or modified functionality
+- Raise a new [issue](https://github.com/hmlendea/nucigenerators.text/issues) for problems or suggestions
 
-- keep the library cross-platform
-- preserve the existing public API unless a breaking change is intentional
-- keep changes focused and consistent with the current coding style
-- update documentation when behavior changes
+See the [contributing guidelines](./CONTRIBUTING.md) for details on how to report issues, suggest enhancements, and submit changes.
 
-## License
+## 📄 License
 
 This project is licensed under the `GNU General Public License v3.0` or later. See [LICENSE](./LICENSE) for details.
