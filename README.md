@@ -288,6 +288,12 @@ See the [contributing guidelines](./CONTRIBUTING.md) for details on how to repor
 
 This project follows the [Code of Conduct](./CODE_OF_CONDUCT.md).
 
+## 🛡️ Privacy and Data
+
+NuciGenerators.Text does not collect, process, transmit, or persist personal data. The library operates entirely in memory on data provided by the consuming application.
+
+For the detailed description of how the application handles privacy and personal data, see [PRIVACY.md](./PRIVACY.md).
+
 ## 📄 License
 
 This project is licensed under the `GNU General Public License v3.0` or later. See [LICENSE](./LICENSE) for details.
