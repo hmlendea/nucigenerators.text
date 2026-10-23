@@ -268,6 +268,12 @@ NuciGenerators.Text/
 	Wordlist.cs
 ```
 
+## 🏗️ Architecture
+
+NuciGenerators.Text is an in-process .NET library with an interface-based generation contract, an extensible base generator, and mutable in-memory word models. Consumers supply candidate-generation algorithms; the base class manages filtering and generation history.
+
+See the [architecture documentation](./ARCHITECTURE.md) for the system context, principal components, runtime flows, ownership boundaries, dependencies, constraints, and extension points.
+
 ## 🤝 Contributing
 
 You are welcome to submit any suggestion, feedback, or modification to this project.
