@@ -294,6 +294,12 @@ NuciGenerators.Text does not collect, process, transmit, or persist personal dat
 
 For the detailed description of how the application handles privacy and personal data, see [PRIVACY.md](./PRIVACY.md).
 
+## 🔒 Security
+
+NuciGenerators.Text is a library with no network operations, file I/O, or persistent storage. Security of consuming applications is the responsibility of those applications.
+
+For the security policy, supported versions, and vulnerability reporting, see [SECURITY.md](./SECURITY.md).
+
 ## 📄 License
 
 This project is licensed under the `GNU General Public License v3.0` or later. See [LICENSE](./LICENSE) for details.
