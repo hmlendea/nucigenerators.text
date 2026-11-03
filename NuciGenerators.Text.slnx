@@ -1,4 +1,5 @@
 <Solution>
   <Project Path="NuciGenerators.Text/NuciGenerators.Text.csproj" />
+  <Project Path="NuciGenerators.Text.ArchitectureTests/NuciGenerators.Text.ArchitectureTests.csproj" />
   <Project Path="NuciGenerators.Text.UnitTests/NuciGenerators.Text.UnitTests.csproj" />
 </Solution>
