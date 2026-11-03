@@ -1,36 +1,108 @@
-[![Donate](https://img.shields.io/badge/-%E2%99%A5%20Donate-%23ff69b4)](https://hmlendea.go.ro/funding) [![Latest Release](https://img.shields.io/github/v/release/hmlendea/nucigenerators.text)](https://github.com/hmlendea/nucigenerators.text/releases/latest) [![Build Status](https://github.com/hmlendea/nucigenerators.text/actions/workflows/dotnet.yml/badge.svg)](https://github.com/hmlendea/nucigenerators.text/actions/workflows/dotnet.yml)
+[![Donate](https://img.shields.io/badge/-%E2%99%A5%20Donate-%23ff69b4)](https://hmlendea.go.ro/funding)
+[![Latest Release](https://img.shields.io/github/v/release/hmlendea/nucigenerators.text)](https://github.com/hmlendea/nucigenerators.text/releases/latest)
+[![Build Status](https://github.com/hmlendea/nucigenerators.text/actions/workflows/dotnet.yml/badge.svg)](https://github.com/hmlendea/nucigenerators.text/actions/workflows/dotnet.yml)
+[![NuGet](https://img.shields.io/nuget/v/NuciGenerators.Text)](https://nuget.org/packages/NuciGenerators.Text)
+[![License](https://img.shields.io/github/license/hmlendea/nucigenerators.text)](https://github.com/hmlendea/nucigenerators.text/blob/master/LICENSE)
 
 # NuciGenerators.Text
 
 Core text generation primitives for the NuciGenerators ecosystem.
 
-This package provides the shared abstractions and models used to build text and name generators. It is not a ready-made generator by itself. Instead, it gives you:
+NuciGenerators.Text is a .NET library for building custom text and name generators from reusable generation contracts, validation rules, and word models.
+## 📑 Table of Contents
 
-- `INameGenerator`, the public generator contract
-- `NameGenerator`, an abstract base class with validation and generation flow
-- model types such as `Word`, `Wordlist`, `GenerationSchema`, and `WordCase`
+- [Capabilities](#capabilities)
+- [Use Cases](#use-cases)
+- [Usage](#usage)
+  - [Examples](#examples)
+- [Compatibility](#compatibility)
+- [Installation](#installation)
+  - [Package Manager Installation](#package-manager-installation)
+- [Configuration](#configuration)
+  - [Settings](#settings)
+- [Extensibility](#extensibility)
+- [Privacy and Data](#privacy-and-data)
+- [Development](#development)
+  - [Requirements](#requirements)
+  - [Setup](#setup)
+  - [Build](#build)
+  - [Test](#test)
+  - [Continuous Integration](#continuous-integration)
+  - [Release](#release)
+  - [Dependencies](#dependencies)
+- [GitHub Actions](#github-actions)
+- [Project Structure](#project-structure)
+  - [Projects and Packages](#projects-and-packages)
+  - [Directories](#directories)
+- [Architecture](#architecture)
+- [Documentation](#documentation)
+- [API Reference](#api-reference)
+- [Troubleshooting](#troubleshooting)
+- [FAQ](#faq)
+- [Contributing](#contributing)
+- [Code of Conduct](#code-of-conduct)
+- [Security](#security)
+- [Project Engagement](#project-engagement)
+- [License](#license)
 
-If you want to build a custom fantasy name generator, procedural word generator, or a higher-level package on top of the NuciGenerators stack, this is the base package to start from.
+## ✨ Capabilities
 
-## Features
+- Define custom candidate-generation algorithms through `NameGenerator`.
+- Generate batches of unique text values with a cooperative processing budget.
+- Apply length, prefix, suffix, inclusion, exclusion, and seed-word filters.
+- Track generated values and reset generation history.
+- Describe reusable words, wordlists, schemas, and casing modes.
 
-- Simple interface for generating a batch of names
-- Reusable abstract base class for implementing custom generation algorithms
-- Built-in validation for:
-  - minimum and maximum length
-  - prefix and suffix filters
-  - required regex patterns
-  - forbidden regex patterns
-  - duplicate prevention
-  - excluding names already present in the seed wordlists
-- Tracking of previously generated values
-- Basic word and schema models for higher-level generator implementations
+## 🎯 Use Cases
 
-## Installation
+- **Custom generators:** Build fantasy name, procedural word, and domain-specific text generators.
+- **Reusable word data:** Store and group word fragments in keyed wordlists.
+- **Validated output:** Apply shared acceptance rules before returning generated values.
 
-[![Get it from NuGet](https://raw.githubusercontent.com/hmlendea/readme-assets/master/badges/stores/nuget.png)](https://nuget.org/packages/NuciGenerators.Text)
+## 🚀 Usage
 
-### .NET CLI
+Derive from `NameGenerator`, implement `GenerationAlgorithm()`, and configure the inherited filters before requesting results.
+
+```csharp
+using System.Collections.Generic;
+using NuciGenerators.Text;
+
+public sealed class ExampleNameGenerator : NameGenerator
+{
+    private static readonly string[] candidates = ["Oscar", "Robert", "Ilarion"];
+    private int nextCandidate;
+
+    public ExampleNameGenerator() : base([])
+    {
+    }
+
+    protected override string GenerationAlgorithm()
+    {
+        string candidate = candidates[nextCandidate];
+        nextCandidate = (nextCandidate + 1) % candidates.Length;
+        return candidate;
+    }
+}
+
+ExampleNameGenerator generator = new();
+IEnumerable<string> names = generator.Generate(2);
+```
+
+### Examples
+
+The [quick-start guide](./docs/quick-start.md) provides a complete deterministic consumer example and links to the relevant behaviour documentation.
+
+## 🧩 Compatibility
+
+| Component | Supported Versions | Notes |
+|-----------|--------------------|-------|
+| .NET | 10.0 | The library targets `net10.0`. |
+
+## 📦 Installation
+
+[![Obtain it from NuGet](https://raw.githubusercontent.com/hmlendea/readme-assets/master/badges/stores/nuget.png)](https://nuget.org/packages/NuciGenerators.Text)
+
+### Package Manager Installation
 
 ```bash
  dotnet add package NuciGenerators.Text
@@ -42,39 +114,44 @@ If you want to build a custom fantasy name generator, procedural word generator,
 dotnet add package NuciGenerators.Text
 ```
 
-### Package Manager
-
+Or, via the `Package Manager Console`:
 ```powershell
 Install-Package NuciGenerators.Text
 ```
 
-## Target Framework
+## ⚙️ Configuration
 
-The project currently targets `.NET 10.0`.
+The consumer configures public `NameGenerator` properties directly in code. There are no configuration files, environment variables, command-line options, secret providers, or precedence chains.
 
-## What This Package Contains
+### Settings
 
-### `INameGenerator`
+The subsequent settings are recognised:
+| Section | Key | Type | Default | Required | Description |
+|---------|-----|------|---------|----------|-------------|
+| `NameGenerator` | `MinNameLength` | `int` | `5` | No | Minimum candidate length. |
+| `NameGenerator` | `MaxNameLength` | `int` | `10` | No | Maximum candidate length. |
+| `NameGenerator` | `MaxProcessingTimePerWord` | `int` | `1000` | No | Milliseconds allocated per requested result. |
+| `NameGenerator` | `OnlyNewNames` | `bool` | `true` | No | Controls rejection of values already present in seed wordlists. |
+| `NameGenerator` | `StartsWithFilter` | `string` | Empty | No | Required prefix. |
+| `NameGenerator` | `EndsWithFilter` | `string` | Empty | No | Required suffix. |
+| `NameGenerator` | `ExcludedStrings` | `List<string>` | `[]` | No | Regular expressions that reject candidates. |
+| `NameGenerator` | `IncludedStrings` | `List<string>` | `[]` | No | Regular expressions every candidate must match. |
 
-The public contract for generators. It exposes:
+## 🧱 Extensibility
 
-- `MinNameLength`
-- `MaxNameLength`
-- `MaxProcessingTimePerWord`
-- `ExcludedStrings`
-- `IncludedStrings`
-- `StartsWithFilter`
-- `EndsWithFilter`
-- `GeneratedWords`
-- `Wordlists`
-- `Generate(int maximumCount)`
-- `Reset()`
+Implement `GenerationAlgorithm()` in a `NameGenerator` subclass, or implement `INameGenerator` when a different generation flow is required.
 
 `OnlyNewNames` is available on the abstract base class but is not part of the independent interface contract.
 
 ### `NameGenerator`
 
-Derive from `NameGenerator` and override `GenerationAlgorithm()` to produce candidates. The legacy protected `GenerationAlogrithm()` spelling remains available for existing subclasses.
+| Extension Point | Contract | Purpose |
+|-----------------|----------|---------|
+| `GenerationAlgorithm()` | Protected virtual method | Produce one candidate for validation. |
+| `GenerationAlogrithm()` | Legacy protected virtual method | Preserve compatibility with existing subclasses. |
+| `INameGenerator` | Public interface | Supply an independent generator implementation. |
+
+Derive from `NameGenerator` and override `GenerationAlgorithm()` to produce candidates. Existing subclasses that override the legacy `GenerationAlogrithm()` spelling remain supported.
 
 An abstract base class that implements most of the behavior needed by a generator:
 
@@ -84,25 +161,19 @@ An abstract base class that implements most of the behavior needed by a generato
 - validates each candidate name before accepting it
 - stores accepted values in `GeneratedWords`
 
-Default settings:
+## 🛡️ Privacy and Data
 
-- `MinNameLength = 5`
-- `MaxNameLength = 10`
-- `MaxProcessingTimePerWord = 1000`
-- `OnlyNewNames = true`
-- `StartsWithFilter = string.Empty`
-- `EndsWithFilter = string.Empty`
-- `ExcludedStrings = []`
-- `IncludedStrings = []`
+NuciGenerators.Text does not collect, process, transmit, or persist personal data. The library operates entirely in memory on data provided by the consuming application.
 
-### Models
+For the detailed description of how the application handles privacy and personal data, see [PRIVACY.md](./PRIVACY.md).
 
-- `Word`: a word entry identified by `Id`, with one or more string `Values`
-- `Wordlist`: a keyed collection of `Word` objects with enumeration support
-- `GenerationSchema`: metadata container for describing generation schemes
-- `WordCase`: casing mode enum with `Original`, `Lower`, `Upper`, `Title`, and `Sentence`
+## 🛠️ Development
 
-## Quick Start
+### Requirements
+
+- [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
+
+### Setup
 
 Because `NameGenerator` is abstract, you need to derive from it and implement the generation algorithm.
 
@@ -116,47 +187,28 @@ using NuciGenerators.Text.Models;
 
 public sealed class SimpleNameGenerator : NameGenerator
 {
-	public SimpleNameGenerator(List<Wordlist> wordlists)
-		: base(wordlists)
-	{
-	}
+    public SimpleNameGenerator(List<Wordlist> wordlists)
+        : base(wordlists)
+    {
+    }
 
-	protected override string GenerationAlgorithm()
-	{
-		Wordlist syllables = Wordlists[0];
+    protected override string GenerationAlgorithm()
+    {
+        Wordlist syllables = Wordlists[0];
+        string first = syllables.Values.ElementAt(random.Next(syllables.Values.Count())).Values.First();
+        string second = syllables.Values.ElementAt(random.Next(syllables.Values.Count())).Values.First();
 
-		string first = syllables.Values.ElementAt(random.Next(syllables.Values.Count())).Values.First();
-		string second = syllables.Values.ElementAt(random.Next(syllables.Values.Count())).Values.First();
-
-		return first + second;
-	}
+        return first + second;
+    }
 }
+```
 
-List<Wordlist> wordlists =
-[
-	new Wordlist(
-	[
-		new Word { Id = "a", Values = ["al", "ar", "an"] },
-		new Word { Id = "b", Values = ["dor", "mir", "len"] },
-		new Word { Id = "c", Values = ["ia", "or", "us"] }
-	])
-];
+### Setup
 
-SimpleNameGenerator generator = new(wordlists)
-{
-	MinNameLength = 4,
-	MaxNameLength = 8,
-	StartsWithFilter = "a",
-	ExcludedStrings = [".*rr.*"],
-	IncludedStrings = ["[aeiou]"],
-};
-
-IEnumerable<string> names = generator.Generate(10);
-
-foreach (string name in names)
-{
-	Console.WriteLine(name);
-}
+```bash
+git clone https://github.com/hmlendea/nucigenerators.text.git
+cd nucigenerators.text
+dotnet restore
 ```
 
 ## Validation Rules
@@ -170,6 +222,12 @@ A generated name is rejected when:
 - it does not start with `StartsWithFilter`
 - it does not end with `EndsWithFilter`
 - it has already been generated in the current session
+
+### Build
+
+```bash
+dotnet build NuciGenerators.Text.slnx
+```
 - `OnlyNewNames` is enabled and the same value already exists in any seed `Wordlist`
 - it matches any pattern in `ExcludedStrings`
 - it does not match every pattern in `IncludedStrings`
@@ -254,49 +312,91 @@ It also implements equality members for comparing schema definitions.
 - storing and grouping word fragments in reusable wordlists
 - applying validation and filtering rules to generated text
 
-## Building from Source
+### Build
 
 ```bash
 dotnet build NuciGenerators.Text.slnx
 ```
 
-To produce a release build:
+### Test
 
 ```bash
 dotnet build NuciGenerators.Text.slnx -c Release
+
+dotnet test NuciGenerators.Text.slnx --no-build --verbosity normal
 ```
 
-## Project Structure
+### Continuous Integration
 
-```text
-NuciGenerators.Text/
-  INameGenerator.cs
-  NameGenerator.cs
-  Models/
-	GenerationSchema.cs
-	Word.cs
-	WordCase.cs
-	Wordlist.cs
-```
+The `dotnet.yml` workflow restores dependencies, builds the solution, and runs tests on pushes and pull requests targeting `master`.
+
+### Release
+
+Published GitHub Releases trigger the `github-release.yml` workflow to pack the NuGet package, upload it to the release, and append its SHA256 checksum. The `nuget-release.yml` workflow publishes the package to NuGet.org using OIDC authentication.
+
+### Dependencies
+
+Production code uses the .NET 10 BCL and has no direct third-party dependencies. Test-only dependencies are listed in the test project manifests.
+
+## ⚙️ GitHub Actions
+
+| Workflow | Purpose | What it does |
+|----------|---------|--------------|
+| [ .NET ](https://github.com/hmlendea/nucigenerators.text/blob/master/.github/workflows/dotnet.yml) | Continuous integration | Restores, builds, and tests the solution. |
+| [ GitHub Release ](https://github.com/hmlendea/nucigenerators.text/blob/master/.github/workflows/github-release.yml) | GitHub package release | Packs the NuGet package, uploads it to a release, and records its checksum. |
+| [ NuGet.org Release ](https://github.com/hmlendea/nucigenerators.text/blob/master/.github/workflows/nuget-release.yml) | NuGet publication | Packs and publishes the package after a published GitHub release. |
+
+## 🗂️ Project Structure
+
+The solution contains the production library and separate unit-test and architecture-test projects.
+
+### Projects and Packages
+
+| Project | Type | Purpose |
+|---------|------|---------|
+| `NuciGenerators.Text` | .NET library | Public generation contracts and models. |
+| `NuciGenerators.Text.UnitTests` | Test project | Unit tests for generation and model behaviour. |
+| `NuciGenerators.Text.ArchitectureTests` | Test project | Architecture and source-file convention tests. |
+
+### Directories
+
+| Directory | Purpose |
+|-----------|---------|
+| `NuciGenerators.Text/Models` | Production word, schema, and casing models. |
+| `NuciGenerators.Text.UnitTests/Models` | Model unit tests. |
+| `docs` | Repository knowledge base and API documentation. |
+| `.github/workflows` | Continuous integration and release workflows. |
 
 ## 🏗️ Architecture
 
-NuciGenerators.Text is an in-process .NET library with an interface-based generation contract, an extensible base generator, and mutable in-memory word models. Consumers supply candidate-generation algorithms; the base class manages filtering and generation history.
+NuciGenerators.Text is an in-process .NET library with an interface-based generation contract, an extensible base generator, and mutable in-memory word models.
 
 See the [architecture documentation](./ARCHITECTURE.md) for the system context, principal components, runtime flows, ownership boundaries, dependencies, constraints, and extension points.
 
 ## 📚 Documentation
 
-The [repository knowledge base](./docs/INDEX.md) documents implementation contracts, causal execution flows, state ownership, verification evidence, and safe modification paths. It complements the root architecture rather than duplicating it.
+The repository maintains a knowledge base covering implementation contracts, execution flows, state ownership, verification evidence, and safe modification paths.
 
 | Resource | Description |
 |----------|-------------|
-| [Knowledge Base Index](./docs/INDEX.md) | Complete catalogue, entry points, source baseline, and review coverage |
-| [Generator and Model API](./docs/api-reference/INDEX.md) | Public CLR contracts and protected extension points; no HTTP endpoints |
-| [Execution Flows](./docs/flows/generation.md) | Generation, ordered validation, and mutation/reset semantics |
-| [Change Guide](./docs/change-guide.md) | Modification impact, invariants, and focused verification |
-| [Testing](./docs/testing.md) | Behaviour-to-test mapping, executed baseline, and remaining gaps |
-| [Open Questions](./docs/ambiguities-and-open-questions.md) | Source/documentation differences and unverified guarantees |
+| [Knowledge Base Index](./docs/INDEX.md) | Complete documentation catalogue and entry points. |
+| [Quick Start](./docs/quick-start.md) | Deterministic consumer example and next steps. |
+| [Configuration](./docs/configuration.md) | Public settings, defaults, and invalid configurations. |
+| [Testing](./docs/testing.md) | Test coverage and verification guidance. |
+| [Troubleshooting](./docs/troubleshooting.md) | Evidence-based diagnostic guidance. |
+| [FAQ](./docs/faq.md) | Frequently asked questions. |
+
+## 🌐 API Reference
+
+See the [API reference index](./docs/api-reference/INDEX.md) for the public CLR contracts, protected extension points, and model documentation.
+
+## 🩺 Troubleshooting
+
+See the [Troubleshooting Guide](./docs/troubleshooting.md) for diagnostic procedures and resolutions to recurring problems.
+
+## ❓ FAQ
+
+See the [Frequently Asked Questions](./docs/faq.md) for responses to frequently raised inquiries.
 
 ## 🤝 Contributing
 
@@ -316,20 +416,23 @@ See the [contributing guidelines](./CONTRIBUTING.md) for details on how to repor
 
 ## 📜 Code of Conduct
 
-This project follows the [Code of Conduct](./CODE_OF_CONDUCT.md).
-
-## 🛡️ Privacy and Data
-
-NuciGenerators.Text does not collect, process, transmit, or persist personal data. The library operates entirely in memory on data provided by the consuming application.
-
-For the detailed description of how the application handles privacy and personal data, see [PRIVACY.md](./PRIVACY.md).
+See the [Code of Conduct](./CODE_OF_CONDUCT.md) for the standards of conduct expected in all project spaces.
 
 ## 🔒 Security
 
-NuciGenerators.Text is a library with no network operations, file I/O, or persistent storage. Security of consuming applications is the responsibility of those applications.
+NuciGenerators.Text is a library with no network operations, file I/O, or persistent storage.
 
-For the security policy, supported versions, and vulnerability reporting, see [SECURITY.md](./SECURITY.md).
+For information on reporting security vulnerabilities, see [SECURITY.md](./SECURITY.md).
+
+## 💝 Project Engagement
+
+Discovered a problem or have a suggestion? [Open an issue](https://github.com/hmlendea/nucigenerators.text/issues)!
+
+If you find this project useful, consider funding it or starring ⭐️ it on GitHub!
+
+[![Donate](https://raw.githubusercontent.com/hmlendea/readme-assets/master/donate_generic.png)](https://hmlendea.go.ro/funding)
 
 ## 📄 License
 
-This project is licensed under the `GNU General Public License v3.0` or later. See [LICENSE](./LICENSE) for details.
+This project is being distributed under the `GNU General Public License v3.0` or later.
+See [LICENSE](./LICENSE) for additional information.
