@@ -163,7 +163,6 @@ flowchart LR
   Generator[NameGenerator] --> Contract[INameGenerator]
   Generator --> Models[Models]
   Contract --> Models
-  Schema[GenerationSchema] --> Extensions[NuciExtensions]
 ```
 
 The principal dependency rules are:
@@ -175,14 +174,14 @@ The principal dependency rules are:
 
 | Dependency | Responsibility | Integration Boundary | Architectural Consequence |
 |------------|----------------|----------------------|---------------------------|
+
 | .NET 10 BCL | Collections, random values, clock, regex, and annotations | Production library | Both projects target `net10.0` |
-| NuciExtensions 5.3.1 | `NotEquals` type comparison in schema object equality | `GenerationSchema.Equals(object)` | Direct production package dependency |
 | NUnit, NUnit3TestAdapter, and Microsoft.NET.Test.Sdk | Test definition, discovery, and execution | Unit-test project | Test-only dependencies |
 | coverlet.collector | Optional coverage collection | Unit-test project | Test-only tooling; not runtime instrumentation |
 
 ## 🚀 Deployment and Operations
 
-The deployment unit is a .NET class library consumed as a package or project reference, not a standalone process. The production manifest declares package version `1.0.1` and disables automatic package generation during builds. The configured CI workflow restores, builds, and tests the solution; it does not publish a package.
+The deployment unit is a .NET class library consumed as a package or project reference, not a standalone process. The production manifest declares package version `1.0.3` and disables automatic package generation during builds. The configured CI workflow restores, builds, and tests the solution; it does not publish a package.
 
 | Concern | Current Design | Architectural Consequence |
 |---------|----------------|---------------------------|

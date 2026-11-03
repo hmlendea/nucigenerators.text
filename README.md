@@ -33,6 +33,12 @@ If you want to build a custom fantasy name generator, procedural word generator,
 ### .NET CLI
 
 ```bash
+ dotnet add package NuciGenerators.Text
+```
+
+### Package Manager Installation
+
+```bash
 dotnet add package NuciGenerators.Text
 ```
 
@@ -64,7 +70,11 @@ The public contract for generators. It exposes:
 - `Generate(int maximumCount)`
 - `Reset()`
 
+`OnlyNewNames` is available on the abstract base class but is not part of the independent interface contract.
+
 ### `NameGenerator`
+
+Derive from `NameGenerator` and override `GenerationAlgorithm()` to produce candidates. The legacy protected `GenerationAlogrithm()` spelling remains available for existing subclasses.
 
 An abstract base class that implements most of the behavior needed by a generator:
 

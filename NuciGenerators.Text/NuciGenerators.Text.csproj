@@ -4,6 +4,8 @@
     <TargetFramework>net10.0</TargetFramework>
     <RootNamespace>NuciGenerators.Text</RootNamespace>
     <Version>1.0.3</Version>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
     <Description>Core text generation primitives for the NuciGenerators.Text.* packages.</Description>
     <Authors>Horațiu Mlendea</Authors>
     <Copyright>Copyright 2026 © Horațiu Mlendea</Copyright>
@@ -13,9 +15,5 @@
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <ImplicitUsings>disable</ImplicitUsings>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="NuciExtensions" Version="6.0.2" />
-  </ItemGroup>
 
 </Project>

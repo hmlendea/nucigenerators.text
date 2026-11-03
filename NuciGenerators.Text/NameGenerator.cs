@@ -8,7 +8,7 @@ using NuciGenerators.Text.Models;
 namespace NuciGenerators.Text
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="NameGenerator"/> class.
+    /// Base class for name generators that validates candidates produced by a consumer-defined algorithm.
     /// </summary>
     /// <param name="wordlists">Word lists.</param>
     public abstract class NameGenerator(List<Wordlist> wordlists) : INameGenerator
@@ -36,8 +36,9 @@ namespace NuciGenerators.Text
         public int MaxProcessingTimePerWord { get; set; } = DefaultMaximumProcessingTimePerWord;
 
         /// <summary>
-        /// Gets or sets a value indicating whether seed values are excluded from generated names.
+        /// Gets or sets a value indicating whether names that already exist in the seed wordlists are rejected.
         /// </summary>
+        /// <value>Whether only new names are accepted.</value>
         public bool OnlyNewNames { get; set; } = true;
 
         /// <summary>
@@ -67,11 +68,13 @@ namespace NuciGenerators.Text
         /// <summary>
         /// Gets the generated words.
         /// </summary>
+        /// <value>The generated words.</value>
         public List<string> GeneratedWords { get; protected set; } = [];
 
         /// <summary>
         /// Gets the word lists used to reject existing seed values.
         /// </summary>
+        /// <value>The word lists.</value>
         public List<Wordlist> Wordlists { get; protected set; } = wordlists;
 
         /// <summary>
@@ -117,7 +120,7 @@ namespace NuciGenerators.Text
         }
 
         /// <summary>
-        /// Reset the list of used names.
+        /// Resets the list of used names.
         /// </summary>
         public void Reset() => GeneratedWords.Clear();
 
@@ -136,6 +139,7 @@ namespace NuciGenerators.Text
 
         /// <summary>
         /// Checks whether the name is valid.
+
         /// </summary>
         /// <returns><c>true</c>, if name is valid, <c>false</c> otherwise.</returns>
         /// <param name="name">Name.</param>
@@ -157,26 +161,26 @@ namespace NuciGenerators.Text
                 return false;
             }
 
-            // The same name was previously generated
+            // The same name was previously generated.
             if (GeneratedWords.Contains(name))
             {
                 return false;
             }
 
-            // The same name was part of the seed wordlists
-            if (OnlyNewNames && Wordlists.Any(wl => wl.Any(w => w.Values.Contains(name))))
+            // The same name was part of the seed wordlists.
+            if (OnlyNewNames && Wordlists.Any(wordlist => wordlist.Any(word => word.Values.Contains(name))))
             {
                 return false;
             }
 
-            // The name contains a blacklisted pattern
-            if (ExcludedStrings.Any(p => Regex.IsMatch(name, p)))
+            // The name contains a blacklisted pattern.
+            if (ExcludedStrings.Any(pattern => Regex.IsMatch(name, pattern)))
             {
                 return false;
             }
 
-            // The name does not contain a mandatory pattern
-            if (!IncludedStrings.All(p => Regex.IsMatch(name, p)))
+            // The name does not contain a mandatory pattern.
+            if (!IncludedStrings.All(pattern => Regex.IsMatch(name, pattern)))
             {
                 return false;
             }
