@@ -17,6 +17,6 @@ This repository exposes a CLR library API, not HTTP controllers. There are no en
 
 ## Versioning and limits
 
-The [manifest](../../NuciGenerators.Text/NuciGenerators.Text.csproj) declares version 1.0.1 and target `net10.0`; no explicit semantic-versioning or deprecation procedure is implemented by source. The [Security policy](../../SECURITY.md) separately describes supported distributions. The batch clock budget is a cooperative execution limit, not a rate limiter. There is no cancellation or network protocol version.
+The [manifest](../../NuciGenerators.Text/NuciGenerators.Text.csproj) declares version 1.0.3 and target `net10.0`; no explicit semantic-versioning or deprecation procedure is implemented by source. The [Security policy](../../SECURITY.md) separately describes supported distributions. The batch clock budget is a cooperative execution limit, not a rate limiter. There is no cancellation or network protocol version.
 
 See [Usage examples](../api-usage-examples.md), [Data model](../data-model.md), [Generation component](../components/generation-engine.md), and [Errors](../error-handling.md). Full namespaces identify declarations; inherited BCL object members are not separately redefined here.

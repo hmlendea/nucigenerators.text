@@ -2,9 +2,9 @@
 
 ## Production boundary
 
-[Production manifest](../NuciGenerators.Text/NuciGenerators.Text.csproj) targets `net10.0` and directly references NuciExtensions 5.3.1. The repository call site is `NuciGenerators.Text.Models.GenerationSchema.Equals(object)` in [schema source](../NuciGenerators.Text/Models/GenerationSchema.cs), using `NotEquals` on runtime types before casting. No other production third-party call sites are present.
+[Production manifest](../NuciGenerators.Text/NuciGenerators.Text.csproj) targets `net10.0` and has no direct third-party production dependencies. The repository uses only .NET BCL APIs in production code.
 
-The dependency's implementation was not decompiled or substituted with its latest branch. This knowledge base records the call site's role and tests, not unverified package internals. Equality of ordinary base instances and rejection of unrelated object types are corroborated by [schema tests](../NuciGenerators.Text.UnitTests/Models/GenerationSchemaTests.cs). Derived-schema behaviour remains a separate gap.
+Equality of ordinary base instances and rejection of unrelated object types are corroborated by [schema tests](../NuciGenerators.Text.UnitTests/Models/GenerationSchemaTests.cs). Derived-schema behaviour remains a separate gap.
 
 ## Platform dependencies
 
@@ -19,7 +19,7 @@ The dependency's implementation was not decompiled or substituted with its lates
 
 ## Verification dependencies
 
-[Test manifest](../NuciGenerators.Text.UnitTests/NuciGenerators.Text.UnitTests.csproj) references NUnit 4.6.1, NUnit3TestAdapter 6.2.0, Microsoft.NET.Test.Sdk 18.3.0, and coverlet.collector 6.0.4. They supply assertion/discovery/execution and optional coverage collection, not production functionality. Tests reference the library project; production does not reference tests.
+[Test manifest](../NuciGenerators.Text.UnitTests/NuciGenerators.Text.UnitTests.csproj) references NUnit 5.0.0, NUnit3TestAdapter 6.3.1, Microsoft.NET.Test.Sdk 18.11.0, and coverlet.collector 10.1.0. They supply assertion/discovery/execution and optional coverage collection, not production functionality. Tests reference the library project; production does not reference tests.
 
 ## Tooling and delivery
 

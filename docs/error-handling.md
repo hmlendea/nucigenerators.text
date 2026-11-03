@@ -6,7 +6,7 @@
 |-------------------|-----------|-------------------|----------|
 | `NuciGenerators.Text.NameGenerator.IsNameValid` | Ordinary candidate violates a reached rule | `false`; generation requests another candidate if loop permits | [Validation tests](../NuciGenerators.Text.UnitTests/NameGeneratorValidationTests.cs) |
 | `NuciGenerators.Text.NameGenerator.Generate` | Count/deadline stops loop | Empty or partial materialised batch; no error status object | [Generation tests](../NuciGenerators.Text.UnitTests/NameGeneratorTests.cs) |
-| Subclass `GenerationAlogrithm` | Consumer algorithm throws | Exception propagates; prior accepted history retained | [Failure tests](../NuciGenerators.Text.UnitTests/NameGeneratorTests.cs) |
+| Subclass `GenerationAlgorithm` or legacy `GenerationAlogrithm` | Consumer algorithm throws | Exception propagates; prior accepted history retained | [Failure tests](../NuciGenerators.Text.UnitTests/NameGeneratorTests.cs) |
 | Regex evaluation | Reached pattern has invalid syntax | Argument-exception family propagates | [Malformed-pattern tests](../NuciGenerators.Text.UnitTests/NameGeneratorValidationTests.cs) |
 | Seed enumeration | Null collections/elements or enumerable throws | Underlying exception propagates when branch is reached | [Source](../NuciGenerators.Text/NameGenerator.cs); not comprehensively covered |
 | `NuciGenerators.Text.Models.Wordlist.Add` | Duplicate key | `ArgumentException`; original member retained | [Collection tests](../NuciGenerators.Text.UnitTests/Models/WordlistTests.cs) |

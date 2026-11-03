@@ -1,7 +1,13 @@
 namespace NuciGenerators.Text.Models
 {
+    /// <summary>
+    /// The casing applied to generated words.
+    /// </summary>
     public enum WordCase
     {
+        /// <summary>
+        /// The original casing is preserved.
+        /// </summary>
         Original,
 
         /// <summary>
@@ -15,7 +21,7 @@ namespace NuciGenerators.Text.Models
         Upper,
 
         /// <summary>
-        /// The first words starts with an uppercase letter, and the rest are lowercase.
+        /// The first word starts with an uppercase letter, and the rest are lowercase.
         /// </summary>
         Title,
 

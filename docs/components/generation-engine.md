@@ -8,7 +8,7 @@
 
 The primary constructor retains the supplied list as `NuciGenerators.Text.NameGenerator.Wordlists`. Each instance initialises independent history and filter lists, default properties, and a protected readonly `System.Random` object. The base itself never draws random values. Subclasses decide whether to use that field, their own randomness, deterministic data, files, or services; none of those choices is implied by inheritance.
 
-The protected abstract `NuciGenerators.Text.NameGenerator.GenerationAlogrithm()` spelling is part of the subclass contract. It returns one candidate per invocation. A candidate can be rejected without being returned to the caller. There is no exhaustion signal, completion flag, asynchronous callback, or cancellation argument. Throwing aborts the batch; returning null or whitespace merely fails acceptance and can cause another attempt.
+The protected `NuciGenerators.Text.NameGenerator.GenerationAlgorithm()` method is the extension point for new subclasses. The legacy protected `GenerationAlogrithm()` spelling remains supported for existing subclasses. It returns one candidate per invocation. A candidate can be rejected without being returned to the caller. There is no exhaustion signal, completion flag, asynchronous callback, or cancellation argument. Throwing aborts the batch; returning null or whitespace merely fails acceptance and can cause another attempt.
 
 ## Orchestration and causality
 

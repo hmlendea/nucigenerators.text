@@ -6,7 +6,7 @@
 |----------|-----------------------------|
 | [Solution](../NuciGenerators.Text.slnx) | Main library and unit-test project; no executable project |
 | [Public contract](../NuciGenerators.Text/INameGenerator.cs) | `NuciGenerators.Text.INameGenerator` |
-| [Generation base](../NuciGenerators.Text/NameGenerator.cs) | `NuciGenerators.Text.NameGenerator.Generate`, `Reset`, `IsNameValid`, `GenerationAlogrithm` |
+| [Generation base](../NuciGenerators.Text/NameGenerator.cs) | `NuciGenerators.Text.NameGenerator.Generate`, `Reset`, `IsNameValid`, `GenerationAlgorithm`, and legacy `GenerationAlogrithm` |
 | [Word](../NuciGenerators.Text/Models/Word.cs) | `NuciGenerators.Text.Models.Word` |
 | [Wordlist](../NuciGenerators.Text/Models/Wordlist.cs) | `NuciGenerators.Text.Models.Wordlist` |
 | [Schema](../NuciGenerators.Text/Models/GenerationSchema.cs) | `NuciGenerators.Text.Models.GenerationSchema` |

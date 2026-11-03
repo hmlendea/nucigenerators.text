@@ -1,11 +1,10 @@
 using System;
 using System.ComponentModel.DataAnnotations;
-using NuciExtensions;
 
 namespace NuciGenerators.Text.Models
 {
     /// <summary>
-    /// Category.
+    /// A generation schema.
     /// </summary>
     public class GenerationSchema : IEquatable<GenerationSchema>
     {
@@ -15,39 +14,51 @@ namespace NuciGenerators.Text.Models
         /// <value>The identifier.</value>
         [Key]
         [StringLength(40, ErrorMessage = "The {0} must be between {1} and {2} characters long", MinimumLength = 3)]
-        public string Id { get; set; }
+        public string Id { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
         [MaxLength(20)]
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets the category.
         /// </summary>
         /// <value>The category.</value>
-        public string Category { get; set; }
+        public string Category { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets the generation schema.
         /// </summary>
         /// <value>The generation schema.</value>
         [MaxLength(60)]
-        public string Schema { get; set; }
+        public string Schema { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets the path to the filterlist.
         /// </summary>
         /// <value>The filterlist path.</value>
-        public string FilterlistPath { get; set; }
+        public string FilterlistPath { get; set; } = null!;
 
+        /// <summary>
+        /// Gets or sets the word case.
+        /// </summary>
+        /// <value>The word case.</value>
         public WordCase WordCase { get; set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GenerationSchema"/> class.
+        /// </summary>
         public GenerationSchema() => WordCase = WordCase.Sentence;
 
-        public bool Equals(GenerationSchema other)
+        /// <summary>
+        /// Indicates whether the current schema is equal to another schema.
+        /// </summary>
+        /// <param name="other">The schema to compare with.</param>
+        /// <returns><c>true</c> if the schemas are equal, <c>false</c> otherwise.</returns>
+        public bool Equals(GenerationSchema? other)
         {
             if (other is null)
             {
@@ -71,7 +82,7 @@ namespace NuciGenerators.Text.Models
         /// <param name="obj">The <see cref="object"/> to compare with the current <see cref="GenerationSchema"/>.</param>
         /// <returns><c>true</c> if the specified <see cref="object"/> is equal to the current
         /// <see cref="GenerationSchema"/>; otherwise, <c>false</c>.</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is null)
             {
@@ -83,7 +94,7 @@ namespace NuciGenerators.Text.Models
                 return true;
             }
 
-            if (obj.GetType().NotEquals(GetType()))
+            if (obj.GetType() != GetType())
             {
                 return false;
             }
@@ -100,7 +111,7 @@ namespace NuciGenerators.Text.Models
         {
             unchecked
             {
-                return ((Id is not null ? Id.GetHashCode() : 0) * 397) ^
+                return (Id is not null ? Id.GetHashCode() : 0) ^
                        (Name is not null ? Name.GetHashCode() : 0) ^
                        (Schema is not null ? Schema.GetHashCode() : 0) ^
                        (FilterlistPath is not null ? FilterlistPath.GetHashCode() : 0);

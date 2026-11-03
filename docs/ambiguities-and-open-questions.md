@@ -20,7 +20,6 @@
 | Enumerable inputs | Arbitrary `IEnumerable<string>` consumed during seed checks | Desired policy for side effects, repeated/throwing enumeration, or concurrent mutation |
 | Concurrency/re-entrancy | No synchronisation or re-entrancy guard | No supported parallel-use contract or stress tests |
 | Interface/base mismatch | `OnlyNewNames` exists only on base | Whether future interface exposure is desired; a new interface member affects independent implementers |
-| Dependency internals | NuciExtensions 5.3.1 call site present | Matching-version dependency source not inspected; do not infer internals from package naming |
 | Publication | Package metadata and supported channels are documented; CI only validates | Actual release/push automation, registry state, and hosted security-advisory availability not independently verified |
 | Performance | Repeated scans and regex work are visible | No benchmark, memory limit, capacity recommendation, or adversarial regex guarantee |
 | Serialisation | No serializer or format configured | Whether downstream packages depend on names, enum numbers, or annotations as wire contracts |

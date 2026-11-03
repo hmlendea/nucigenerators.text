@@ -25,7 +25,7 @@ Using `--no-build` presumes the chosen configuration has already been built. The
 
 ## Package and deployment boundary
 
-[The production manifest](../NuciGenerators.Text/NuciGenerators.Text.csproj) declares version 1.0.1, repository metadata, GPL-3.0-or-later, and `GeneratePackageOnBuild=false`. A build does not automatically generate a NuGet package. Explicit local packing can use:
+[The production manifest](../NuciGenerators.Text/NuciGenerators.Text.csproj) declares version 1.0.3, repository metadata, GPL-3.0-or-later, and `GeneratePackageOnBuild=false`. A build does not automatically generate a NuGet package. Explicit local packing can use:
 
 ```bash
 dotnet pack NuciGenerators.Text/NuciGenerators.Text.csproj --configuration Release

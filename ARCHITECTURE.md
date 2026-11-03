@@ -49,7 +49,7 @@ The principal external boundaries are:
 
 ## 🏗️ Architectural Style
 
-The library uses interface-based consumption and an abstract template method. `NameGenerator` implements orchestration and validation while delegating candidate construction to its protected abstract `GenerationAlogrithm()` method. Models are mutable data containers, not a schema execution engine.
+The library uses interface-based consumption and a template method. `NameGenerator` implements orchestration and validation while delegating candidate construction to its protected `GenerationAlgorithm()` method. The misspelled `GenerationAlogrithm()` method remains as a compatibility bridge. Models are mutable data containers, not a schema execution engine.
 
 ```mermaid
 flowchart TD
@@ -72,7 +72,7 @@ flowchart TD
   Start[Consumer constructs concrete generator with wordlists] --> Configure[Consumer configures generator]
   Configure --> Generate[Generate creates result list and deadline]
   Generate --> Continue{Count below request and time within deadline?}
-  Continue -->|Yes| Candidate[Call GenerationAlogrithm]
+  Continue -->|Yes| Candidate[Call GenerationAlgorithm]
   Candidate --> Validate{Candidate passes validation?}
   Validate -->|Yes| Record[Append to batch and GeneratedWords]
   Validate -->|No| Clock[Refresh current time]
@@ -125,7 +125,7 @@ flowchart LR
 |--------------------------|-----------|----------|-------|-------------------|
 | `INameGenerator.Generate(int)` | Inbound | Synchronous materialised batch of up to the requested count | Generator implementation | Base implementation propagates algorithm and validation exceptions |
 | `INameGenerator.Reset()` | Inbound | Clear generated history | Generator implementation | Base implementation clears the existing list in place |
-| `GenerationAlogrithm()` | Outbound callback | Protected abstract candidate-generation method | Consumer subclass | Exceptions propagate without rollback of earlier history |
+| `GenerationAlgorithm()` | Outbound callback | Protected candidate-generation method | Consumer subclass | Exceptions propagate without rollback of earlier history |
 | `Wordlist.Add` and `Get` | Inbound | Dictionary-backed insertion and identifier lookup | `Wordlist` | Duplicate keys, absent keys, and invalid arguments use underlying collection exceptions |
 
 There are no built-in remote service integrations. `GenerationSchema.FilterlistPath` is metadata; this library does not load the referenced file.
@@ -163,7 +163,6 @@ flowchart LR
   Generator[NameGenerator] --> Contract[INameGenerator]
   Generator --> Models[Models]
   Contract --> Models
-  Schema[GenerationSchema] --> Extensions[NuciExtensions]
 ```
 
 The principal dependency rules are:
@@ -175,14 +174,14 @@ The principal dependency rules are:
 
 | Dependency | Responsibility | Integration Boundary | Architectural Consequence |
 |------------|----------------|----------------------|---------------------------|
+
 | .NET 10 BCL | Collections, random values, clock, regex, and annotations | Production library | Both projects target `net10.0` |
-| NuciExtensions 5.3.1 | `NotEquals` type comparison in schema object equality | `GenerationSchema.Equals(object)` | Direct production package dependency |
 | NUnit, NUnit3TestAdapter, and Microsoft.NET.Test.Sdk | Test definition, discovery, and execution | Unit-test project | Test-only dependencies |
 | coverlet.collector | Optional coverage collection | Unit-test project | Test-only tooling; not runtime instrumentation |
 
 ## 🚀 Deployment and Operations
 
-The deployment unit is a .NET class library consumed as a package or project reference, not a standalone process. The production manifest declares package version `1.0.1` and disables automatic package generation during builds. The configured CI workflow restores, builds, and tests the solution; it does not publish a package.
+The deployment unit is a .NET class library consumed as a package or project reference, not a standalone process. The production manifest declares package version `1.0.3` and disables automatic package generation during builds. The configured CI workflow restores, builds, and tests the solution; it does not publish a package.
 
 | Concern | Current Design | Architectural Consequence |
 |---------|----------------|---------------------------|
@@ -224,7 +223,7 @@ dotnet test NuciGenerators.Text.slnx
 ### Name Generation
 
 1. Derive from `NameGenerator` and pass the consumer's wordlist collection to its constructor, or implement `INameGenerator` independently.
-2. For a subclass, implement `GenerationAlogrithm()` and construct the implementation in the consuming application; no registration container is provided.
+2. For a new subclass, implement `GenerationAlgorithm()` and construct the implementation in the consuming application; existing subclasses may continue implementing `GenerationAlogrithm()`.
 3. Test candidate production together with inherited validation, history, and failure semantics.
 
 Subclasses can use the protected `random` field and `IsNameValid` method. Candidate production is synchronous; returning a string does not bypass base validation. Independent interface implementations own their own orchestration rather than inheriting base-class guarantees.

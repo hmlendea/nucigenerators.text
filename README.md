@@ -105,6 +105,12 @@ The [quick-start guide](./docs/quick-start.md) provides a complete deterministic
 ### Package Manager Installation
 
 ```bash
+ dotnet add package NuciGenerators.Text
+```
+
+### Package Manager Installation
+
+```bash
 dotnet add package NuciGenerators.Text
 ```
 
@@ -135,10 +141,25 @@ The subsequent settings are recognised:
 
 Implement `GenerationAlgorithm()` in a `NameGenerator` subclass, or implement `INameGenerator` when a different generation flow is required.
 
+`OnlyNewNames` is available on the abstract base class but is not part of the independent interface contract.
+
+### `NameGenerator`
+
 | Extension Point | Contract | Purpose |
 |-----------------|----------|---------|
-| `GenerationAlgorithm()` | Protected abstract method | Produce one candidate for validation. |
+| `GenerationAlgorithm()` | Protected virtual method | Produce one candidate for validation. |
+| `GenerationAlogrithm()` | Legacy protected virtual method | Preserve compatibility with existing subclasses. |
 | `INameGenerator` | Public interface | Supply an independent generator implementation. |
+
+Derive from `NameGenerator` and override `GenerationAlgorithm()` to produce candidates. Existing subclasses that override the legacy `GenerationAlogrithm()` spelling remain supported.
+
+An abstract base class that implements most of the behavior needed by a generator:
+
+- loops until it collects the requested number of valid results or the processing time budget is exhausted
+- calls your custom generation algorithm through `GenerationAlgorithm()`
+- retains the misspelled `GenerationAlogrithm()` extension point for backwards compatibility
+- validates each candidate name before accepting it
+- stores accepted values in `GeneratedWords`
 
 ## 🛡️ Privacy and Data
 
@@ -154,13 +175,59 @@ For the detailed description of how the application handles privacy and personal
 
 ### Setup
 
+Because `NameGenerator` is abstract, you need to derive from it and implement the generation algorithm.
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using NuciGenerators.Text;
+using NuciGenerators.Text.Models;
+
+public sealed class SimpleNameGenerator : NameGenerator
+{
+    public SimpleNameGenerator(List<Wordlist> wordlists)
+        : base(wordlists)
+    {
+    }
+
+    protected override string GenerationAlgorithm()
+    {
+        Wordlist syllables = Wordlists[0];
+        string first = syllables.Values.ElementAt(random.Next(syllables.Values.Count())).Values.First();
+        string second = syllables.Values.ElementAt(random.Next(syllables.Values.Count())).Values.First();
+
+        return first + second;
+    }
+}
+```
+
+### Setup
+
 ```bash
 git clone https://github.com/hmlendea/nucigenerators.text.git
 cd nucigenerators.text
 dotnet restore
 ```
 
+## Validation Rules
+
+Every candidate returned by `GenerationAlgorithm()` is checked before it is accepted. Existing subclasses that override the legacy `GenerationAlogrithm()` method remain supported.
+
+A generated name is rejected when:
+
+- it is `null`, empty, or whitespace
+- its length is outside the configured minimum and maximum bounds
+- it does not start with `StartsWithFilter`
+- it does not end with `EndsWithFilter`
+- it has already been generated in the current session
+
 ### Build
+
+```bash
+dotnet build NuciGenerators.Text.slnx
+```
 - `OnlyNewNames` is enabled and the same value already exists in any seed `Wordlist`
 - it matches any pattern in `ExcludedStrings`
 - it does not match every pattern in `IncludedStrings`
@@ -254,6 +321,8 @@ dotnet build NuciGenerators.Text.slnx
 ### Test
 
 ```bash
+dotnet build NuciGenerators.Text.slnx -c Release
+
 dotnet test NuciGenerators.Text.slnx --no-build --verbosity normal
 ```
 
@@ -267,13 +336,7 @@ Published GitHub Releases trigger the `github-release.yml` workflow to pack the 
 
 ### Dependencies
 
-| Package | Version | Scope | Purpose |
-|---------|---------|-------|---------|
-| `NuciExtensions` | `6.0.2` | Runtime | Provides extensions used by the production library. |
-| `NUnit` | `4.6.1` | Development | Provides unit-test assertions and execution support. |
-| `NUnit3TestAdapter` | `6.2.0` | Development | Integrates NUnit tests with the .NET test platform. |
-| `Microsoft.NET.Test.Sdk` | `18.3.0` | Development | Provides .NET test discovery and execution. |
-| `coverlet.collector` | `6.0.4` | Development | Provides optional coverage collection for tests. |
+Production code uses the .NET 10 BCL and has no direct third-party dependencies. Test-only dependencies are listed in the test project manifests.
 
 ## ⚙️ GitHub Actions
 

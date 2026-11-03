@@ -27,4 +27,9 @@ namespace NuciGenerators.Text.UnitTests
             return candidates.Dequeue();
         }
     }
+
+    internal sealed class ModernScriptedNameGenerator(List<Wordlist> wordlists) : NameGenerator(wordlists)
+    {
+        protected override string GenerationAlgorithm() => "Oscar";
+    }
 }
