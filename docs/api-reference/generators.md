@@ -29,7 +29,7 @@ The public primary constructor accepts `List<NuciGenerators.Text.Models.Wordlist
 | Additional fully qualified member | Visibility and type | Responsibility |
 |----------------------------------|---------------------|----------------|
 | `NuciGenerators.Text.NameGenerator.OnlyNewNames` | Public `bool`, get/set, default true | Toggle seed-value exclusion, not history duplicate suppression |
-| `NuciGenerators.Text.NameGenerator.GenerationAlogrithm()` | Protected abstract `string` | Supply one candidate; spelling is compatibility-sensitive |
+| `NuciGenerators.Text.NameGenerator.GenerationAlgorithm()` | Protected virtual `string` | Supply one candidate for new subclasses |
 | `NuciGenerators.Text.NameGenerator.IsNameValid(string name)` | Protected nonvirtual `bool` | Ordered acceptance without base-owned history mutation |
 | `NuciGenerators.Text.NameGenerator.random` | Protected readonly `Random` | Per-instance subclass convenience; base does not draw values |
 

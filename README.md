@@ -69,7 +69,8 @@ The public contract for generators. It exposes:
 An abstract base class that implements most of the behavior needed by a generator:
 
 - loops until it collects the requested number of valid results or the processing time budget is exhausted
-- calls your custom generation algorithm through `GenerationAlogrithm()`
+- calls your custom generation algorithm through `GenerationAlgorithm()`
+- retains the misspelled `GenerationAlogrithm()` extension point for backwards compatibility
 - validates each candidate name before accepting it
 - stores accepted values in `GeneratedWords`
 
@@ -110,7 +111,7 @@ public sealed class SimpleNameGenerator : NameGenerator
 	{
 	}
 
-	protected override string GenerationAlogrithm()
+	protected override string GenerationAlgorithm()
 	{
 		Wordlist syllables = Wordlists[0];
 
@@ -150,7 +151,7 @@ foreach (string name in names)
 
 ## Validation Rules
 
-Every candidate returned by `GenerationAlogrithm()` is checked before it is accepted.
+Every candidate returned by `GenerationAlgorithm()` is checked before it is accepted. Existing subclasses that override the legacy `GenerationAlogrithm()` method remain supported.
 
 A generated name is rejected when:
 
@@ -246,13 +247,13 @@ It also implements equality members for comparing schema definitions.
 ## Building from Source
 
 ```bash
-dotnet build NuciGenerators.Text.sln
+dotnet build NuciGenerators.Text.slnx
 ```
 
 To produce a release build:
 
 ```bash
-dotnet build NuciGenerators.Text.sln -c Release
+dotnet build NuciGenerators.Text.slnx -c Release
 ```
 
 ## Project Structure

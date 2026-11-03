@@ -163,6 +163,14 @@ namespace NuciGenerators.Text.UnitTests
         }
 
         [Test]
+        public void GivenAModernAlgorithmOverride_WhenGenerating_ThenTheCandidateIsAccepted()
+        {
+            ModernScriptedNameGenerator modernGenerator = new([]);
+
+            Assert.That(modernGenerator.Generate(1), Is.EqualTo(new[] { "Oscar" }));
+        }
+
+        [Test]
         public void GivenAFailingAlgorithm_WhenGenerating_ThenItsExceptionIsPropagatedWithoutRecordingAName()
         {
             Assert.That(() => generator.Generate(1), Throws.TypeOf<InvalidOperationException>());

@@ -13,24 +13,31 @@ namespace NuciGenerators.Text
     /// <param name="wordlists">Word lists.</param>
     public abstract class NameGenerator(List<Wordlist> wordlists) : INameGenerator
     {
+        private const int DefaultMinimumNameLength = 5;
+        private const int DefaultMaximumNameLength = 10;
+        private const int DefaultMaximumProcessingTimePerWord = 1000;
+
         /// <summary>
         /// Gets or sets the minimum length of the name.
         /// </summary>
         /// <value>The minimum length of the name.</value>
-        public int MinNameLength { get; set; } = 5;
+        public int MinNameLength { get; set; } = DefaultMinimumNameLength;
 
         /// <summary>
         /// Gets or sets the maximum length of the name.
         /// </summary>
         /// <value>The maximum length of the name.</value>
-        public int MaxNameLength { get; set; } = 10;
+        public int MaxNameLength { get; set; } = DefaultMaximumNameLength;
 
         /// <summary>
         /// Gets or sets the maximum processing time per word.
         /// </summary>
         /// <value>The maximum processing time per word, in milliseconds.</value>
-        public int MaxProcessingTimePerWord { get; set; } = 1000;
+        public int MaxProcessingTimePerWord { get; set; } = DefaultMaximumProcessingTimePerWord;
 
+        /// <summary>
+        /// Gets or sets a value indicating whether seed values are excluded from generated names.
+        /// </summary>
         public bool OnlyNewNames { get; set; } = true;
 
         /// <summary>
@@ -58,13 +65,18 @@ namespace NuciGenerators.Text
         public string EndsWithFilter { get; set; } = string.Empty;
 
         /// <summary>
-        /// Gets or sets the used words.
+        /// Gets the generated words.
         /// </summary>
-        /// <value>The used words.</value>
         public List<string> GeneratedWords { get; protected set; } = [];
 
+        /// <summary>
+        /// Gets the word lists used to reject existing seed values.
+        /// </summary>
         public List<Wordlist> Wordlists { get; protected set; } = wordlists;
 
+        /// <summary>
+        /// Gets the random source available to candidate-generation implementations.
+        /// </summary>
         protected readonly Random random = new();
 
         /// <summary>
@@ -75,25 +87,33 @@ namespace NuciGenerators.Text
         public IEnumerable<string> Generate(int maximumCount)
         {
             List<string> names = [];
-
-            DateTime startTime = DateTime.Now;
+            DateTime endTime = CalculateEndTime(maximumCount);
             DateTime currentTime = DateTime.Now;
-            DateTime endTime = startTime.AddMilliseconds(MaxProcessingTimePerWord * maximumCount);
 
-            while (names.Count < maximumCount && currentTime <= endTime)
+            while (ShouldContinue(names.Count, maximumCount, currentTime, endTime))
             {
-                string name = GenerationAlogrithm();
-
-                if (IsNameValid(name))
-                {
-                    names.Add(name);
-                    GeneratedWords.Add(name);
-                }
-
+                AddCandidateIfValid(names, GenerationAlogrithm());
                 currentTime = DateTime.Now;
             }
 
             return names;
+        }
+
+        private DateTime CalculateEndTime(int maximumCount)
+            => DateTime.Now.AddMilliseconds(MaxProcessingTimePerWord * maximumCount);
+
+        private static bool ShouldContinue(int currentCount, int maximumCount, DateTime currentTime, DateTime endTime)
+            => currentCount < maximumCount && currentTime <= endTime;
+
+        private void AddCandidateIfValid(List<string> names, string candidate)
+        {
+            if (!IsNameValid(candidate))
+            {
+                return;
+            }
+
+            names.Add(candidate);
+            GeneratedWords.Add(candidate);
         }
 
         /// <summary>
@@ -101,10 +121,21 @@ namespace NuciGenerators.Text
         /// </summary>
         public void Reset() => GeneratedWords.Clear();
 
-        protected abstract string GenerationAlogrithm();
+        /// <summary>
+        /// Generates one candidate name using the legacy extension-point spelling.
+        /// </summary>
+        /// <returns>A candidate name.</returns>
+        protected virtual string GenerationAlogrithm() => GenerationAlgorithm();
 
         /// <summary>
-        /// Checks wether the the name is valid.
+        /// Generates one candidate name.
+        /// </summary>
+        /// <returns>A candidate name.</returns>
+        protected virtual string GenerationAlgorithm()
+            => throw new NotSupportedException("A candidate-generation algorithm must be overridden.");
+
+        /// <summary>
+        /// Checks whether the name is valid.
         /// </summary>
         /// <returns><c>true</c>, if name is valid, <c>false</c> otherwise.</returns>
         /// <param name="name">Name.</param>

@@ -13,7 +13,7 @@ sequenceDiagram
   Caller->>Base: Generate(maximumCount)
   Base->>Base: Allocate batch and calculate wall-clock deadline
   loop Count below request and sampled clock within deadline
-    Base->>Algorithm: GenerationAlogrithm()
+    Base->>Algorithm: GenerationAlgorithm()
     Algorithm-->>Base: Candidate
     Base->>Rules: Validate against current settings and state
     Rules-->>Base: True or false

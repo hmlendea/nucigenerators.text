@@ -21,7 +21,7 @@ namespace DocumentationExample
         private static readonly string[] candidates = ["Oscar", "Robert", "Ilarion"];
         private int nextCandidate;
 
-        protected override string GenerationAlogrithm()
+        protected override string GenerationAlgorithm()
         {
             string candidate = candidates[nextCandidate];
             nextCandidate = (nextCandidate + 1) % candidates.Length;

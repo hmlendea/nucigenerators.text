@@ -30,7 +30,7 @@ They do not exist in this class-library repository. [API reference](./api-refere
 
 ## Why retain the misspelled algorithm method?
 
-`NuciGenerators.Text.NameGenerator.GenerationAlogrithm` is the existing protected abstract signature. Correcting it without compatibility planning breaks subclasses. See [Invariants](./invariants.md).
+`NuciGenerators.Text.NameGenerator.GenerationAlogrithm` is the legacy protected signature. New subclasses should override `GenerationAlgorithm`; the legacy method remains supported for backwards compatibility. See [Invariants](./invariants.md).
 
 ## Are all documented edge cases demonstrated by tests?
 
