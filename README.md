@@ -1,6 +1,7 @@
 [![Donate](https://img.shields.io/badge/-%E2%99%A5%20Donate-%23ff69b4)](https://hmlendea.go.ro/funding)
 [![Latest Release](https://img.shields.io/github/v/release/hmlendea/nucigenerators.text)](https://github.com/hmlendea/nucigenerators.text/releases/latest)
 [![Build Status](https://github.com/hmlendea/nucigenerators.text/actions/workflows/dotnet.yml/badge.svg)](https://github.com/hmlendea/nucigenerators.text/actions/workflows/dotnet.yml)
+[![Security Scan](https://github.com/hmlendea/nucigenerators.text/actions/workflows/security.yml/badge.svg)](https://github.com/hmlendea/nucigenerators.text/actions/workflows/security.yml)
 [![NuGet](https://img.shields.io/nuget/v/NuciGenerators.Text)](https://nuget.org/packages/NuciGenerators.Text)
 [![License](https://img.shields.io/github/license/hmlendea/nucigenerators.text)](https://github.com/hmlendea/nucigenerators.text/blob/master/LICENSE)
 
@@ -330,6 +331,8 @@ dotnet test NuciGenerators.Text.slnx --no-build --verbosity normal
 
 The `dotnet.yml` workflow restores dependencies, builds the solution, and runs tests on pushes and pull requests targeting `master`.
 
+The `security.yml` workflow checks vulnerable dependencies and runs CodeQL analysis for C# on pushes and pull requests targeting `master`, and weekly on schedule.
+
 ### Release
 
 Published GitHub Releases trigger the `github-release.yml` workflow to pack the NuGet package, upload it to the release, and append its SHA256 checksum. The `nuget-release.yml` workflow publishes the package to NuGet.org using OIDC authentication.
@@ -343,6 +346,7 @@ Production code uses the .NET 10 BCL and has no direct third-party dependencies.
 | Workflow | Purpose | What it does |
 |----------|---------|--------------|
 | [ .NET ](https://github.com/hmlendea/nucigenerators.text/blob/master/.github/workflows/dotnet.yml) | Continuous integration | Restores, builds, and tests the solution. |
+| [ Security Scan ](https://github.com/hmlendea/nucigenerators.text/blob/master/.github/workflows/security.yml) | Security scanning | Checks vulnerable dependencies and runs CodeQL analysis for C#. |
 | [ GitHub Release ](https://github.com/hmlendea/nucigenerators.text/blob/master/.github/workflows/github-release.yml) | GitHub package release | Packs the NuGet package, uploads it to a release, and records its checksum. |
 | [ NuGet.org Release ](https://github.com/hmlendea/nucigenerators.text/blob/master/.github/workflows/nuget-release.yml) | NuGet publication | Packs and publishes the package after a published GitHub release. |
 
@@ -420,7 +424,7 @@ See the [Code of Conduct](./CODE_OF_CONDUCT.md) for the standards of conduct exp
 
 ## 🔒 Security
 
-NuciGenerators.Text is a library with no network operations, file I/O, or persistent storage.
+NuciGenerators.Text is a library with no network operations, file I/O, or persistent storage. Automated security scanning checks vulnerable dependencies and runs CodeQL analysis for C#.
 
 For information on reporting security vulnerabilities, see [SECURITY.md](./SECURITY.md).
 

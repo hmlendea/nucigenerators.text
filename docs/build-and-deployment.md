@@ -21,7 +21,7 @@ Using `--no-build` presumes the chosen configuration has already been built. The
 
 ## Configured CI
 
-[The .NET workflow](../.github/workflows/dotnet.yml) runs on pushes and pull requests targeting `master`. Its single Ubuntu job checks out source with checkout v2, selects .NET 10.0.x with setup-dotnet v1, restores, builds without restoring again, and tests without rebuilding. It does not collect coverage explicitly, upload test artefacts, publish documentation, run a security audit, or release a package. Local test success is not evidence of remote workflow success.
+[The .NET workflow](../.github/workflows/dotnet.yml) runs on pushes and pull requests targeting `master`. Its single Ubuntu job checks out source with checkout v2, selects .NET 10.0.x with setup-dotnet v1, restores, builds without restoring again, and tests without rebuilding. The [security workflow](../.github/workflows/security.yml) checks vulnerable NuGet dependencies and runs CodeQL analysis for C# on pushes and pull requests targeting `master`, and weekly on schedule. Local test success is not evidence of remote workflow success.
 
 ## Package and deployment boundary
 

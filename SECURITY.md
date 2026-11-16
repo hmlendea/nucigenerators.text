@@ -8,6 +8,7 @@ This document describes the security policy for NuciGenerators.Text, including s
 - [Reporting a Vulnerability](#reporting-a-vulnerability)
 - [Scope](#scope)
 - [Disclosure Policy](#disclosure-policy)
+- [Automated Security Scanning](#automated-security-scanning)
 - [Safe Harbour](#safe-harbour)
 - [Recognition](#recognition)
 
@@ -51,6 +52,14 @@ This project follows coordinated disclosure:
 2. A remediation plan is prepared and validated.
 3. Public disclosure is published after a fix, mitigation, or agreed risk decision is available.
 4. Credit is attributed in accordance with reporter preference and project policy.
+
+## 🔍 Automated Security Scanning
+
+This repository runs automated security scans on pushes and pull requests targeting `master`, and weekly on schedule. The scan includes:
+- **NuGet dependencies** vulnerable package checks, including transitive dependencies.
+- **C# source code** CodeQL analysis.
+
+Results are published to the [Security](https://github.com/hmlendea/nucigenerators.text/security) tab and the [Actions](https://github.com/hmlendea/nucigenerators.text/actions/workflows/security.yml) workflow page.
 
 ## 🧾 Safe Harbour
 
