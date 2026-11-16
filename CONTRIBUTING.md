@@ -93,6 +93,8 @@ This project follows the [Code of Conduct](./CODE_OF_CONDUCT.md).
 
 Report security vulnerabilities per the [Security Policy](./SECURITY.md).
 
+The `security.yml` workflow checks vulnerable dependencies and runs CodeQL analysis for C# on pushes and pull requests targeting `master`, and weekly on schedule.
+
 ## 📄 License
 
 By contributing, you agree that your contributions will be licensed under the GNU General Public License v3.0.

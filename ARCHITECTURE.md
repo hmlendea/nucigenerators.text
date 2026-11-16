@@ -239,6 +239,7 @@ Subclasses can use the protected `random` field and `IsNameValid` method. Candid
 | Behavioural verification | [Unit Tests](./NuciGenerators.Text.UnitTests/) |
 | Solution | [NuciGenerators.Text.slnx](./NuciGenerators.Text.slnx) |
 | Continuous integration | [dotnet.yml](./.github/workflows/dotnet.yml) |
+| Security scanning | [security.yml](./.github/workflows/security.yml) |
 
 ## 📚 Related Documentation
 

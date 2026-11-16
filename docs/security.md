@@ -24,4 +24,4 @@ Repository-owned production source contains no explicit network/file persistence
 
 ## Verification scope
 
-[Validation tests](../NuciGenerators.Text.UnitTests/NameGeneratorValidationTests.cs) test malformed patterns and guards, not adversarial execution time. No security scan results, penetration tests, sandbox proof, secure-erasure test, or dependency vulnerability assessment were produced for this documentation task.
+[Validation tests](../NuciGenerators.Text.UnitTests/NameGeneratorValidationTests.cs) test malformed patterns and guards, not adversarial execution time. The [security workflow](../.github/workflows/security.yml) performs vulnerable-dependency checks and CodeQL analysis for C# on master pushes, pull requests, and a weekly schedule. No penetration tests, sandbox proof, or secure-erasure tests were produced for this documentation task.

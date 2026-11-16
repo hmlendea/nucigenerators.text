@@ -19,6 +19,7 @@
 | [Collection tests](../NuciGenerators.Text.UnitTests/Models/WordlistTests.cs) | Lookup, membership snapshots, aliasing, and exceptions |
 | [Schema tests](../NuciGenerators.Text.UnitTests/Models/GenerationSchemaTests.cs) | Equality, hashing, annotations, and casing default |
 | [CI workflow](../.github/workflows/dotnet.yml) | Restore, build, test on master pushes and pull requests |
+| [Security workflow](../.github/workflows/security.yml) | Vulnerable dependency checks and CodeQL analysis on master pushes, pull requests, and weekly schedule |
 
 ## Generated and non-runtime files
 
